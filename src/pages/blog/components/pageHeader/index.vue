@@ -58,6 +58,13 @@
             </el-button>
         </el-form-item>
 
+        <el-form-item>
+            <el-button type="danger"
+                       @click="handleFormArticle">
+                <d2-icon name="refresh"/>
+                写文章
+            </el-button>
+        </el-form-item>
     </el-form>
 </template>
 
@@ -93,6 +100,9 @@
             },
             handleFormReset() {
                 this.$refs.form.resetFields()
+            },
+            handleFormArticle() {
+                this.$emit('onArticle')
             }
         }
     }

@@ -1,19 +1,10 @@
 <template>
     <d2-container>
         <d2-container :filename="filename">
-            <page-header
-                    slot="header"
-                    @submit="handleSubmit"
-                    ref="header"/>
-            <page-main
-                    :table-data="table"
-                    :loading="loading"/>
-            <page-footer
-                    slot="footer"
-                    :current="page.pageCurrent"
-                    :size="page.pageSize"
-                    :total="page.pageTotal"
-                    @change="handlePaginationChange"/>
+            <page-header slot="header" @submit="handleSubmit" @onArticle="handleArticle" ref="header"/>
+            <page-main :table-data="table" :loading="loading"/>
+            <page-footer slot="footer" :current="page.pageCurrent" :size="page.pageSize" :total="page.pageTotal"
+                         @change="handlePaginationChange"/>
         </d2-container>
     </d2-container>
 </template>
@@ -34,9 +25,9 @@
             }
         },
         components: {
-            'PageHeader': () => import('./components/pageHeader'),
-            'PageMain': () => import('./components/pageMain'),
-            'PageFooter': () => import('./components/pageFooter')
+            'PageHeader': () => import('../components/pageHeader'),
+            'PageMain': () => import('../components/pageMain'),
+            'PageFooter': () => import('../components/pageFooter')
         },
         methods: {
             handlePaginationChange(val) {
@@ -51,27 +42,12 @@
                 })
             },
             handleSubmit(form) {
-                this.loading = true
+                this.loadingloading = true
                 this.$notify({
                     title: '开始请求模拟表格数据'
                 })
-                BusinessTable1List({
-                    ...form,
-                    ...this.page
-                }).then(res => {
-                    this.loading = false
-                    this.$notify({
-                        title: '模拟表格数据请求完毕'
-                    })
-                    this.table = res.list
-                    this.page.pageTotal = res.page.total
-                }).catch(err => {
-                    this.loading = false
-                    this.$notify({
-                        title: '模拟表格数据请求异常'
-                    })
-                    console.log('err', err)
-                })
+            },
+            handleArticle() {
             }
         }
     }
