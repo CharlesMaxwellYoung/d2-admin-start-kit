@@ -16,6 +16,12 @@ export default {
             meta: {meta, title: '所有文章'}
         },
         {
+            path: 'write-article',
+            name: `${pre}write-article`,
+            component: () => import('@/pages/blog/write-article'),
+            meta: {meta, title: '编写博客'}
+        },
+        {
             path: 'page2',
             name: `${pre}page2`,
             component: () => import('@/pages/demo/page2'),
@@ -25,6 +31,7 @@ export default {
             path: 'page3',
             name: `${pre}page3`,
             component: () => import('@/pages/demo/page3'),
-            meta: {meta, title: '页面 3'}}
+            meta: {meta, title: '页面 3'}
+        }
     ])('demo-')
 }

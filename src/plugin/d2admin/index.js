@@ -13,14 +13,9 @@ import d2VueFiltersDate from '@d2-projects/vue-filters-date'
 import pluginError from '@/plugin/error'
 import pluginLog from '@/plugin/log'
 import pluginOpen from '@/plugin/open'
-
-//VueQuillEditor
-import VueQuillEditor from 'vue-quill-editor';
-
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
-
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
+import pluginDayjs from '@/plugin/dayjs'
 
 export default {
     async install(Vue, options) {
@@ -40,9 +35,13 @@ export default {
         // 过滤器 日期模块
         Vue.use(d2VueFiltersDate)
         // 插件
+        Vue.use(pluginDayjs)
         Vue.use(pluginError)
         Vue.use(pluginLog)
         Vue.use(pluginOpen)
-        Vue.use(VueQuillEditor)
+        // 第三方插件
+        Vue.use(mavonEditor)
+
+
     }
 }

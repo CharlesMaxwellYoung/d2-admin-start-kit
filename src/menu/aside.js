@@ -28,6 +28,10 @@ export default [
                 title: '全部文章'
             },
             {
+                path: '/blog/write-article',
+                title: '编写博客'
+            },
+            {
                 path: '/demo/page2',
                 title: '草稿文章'
             },

@@ -1,11 +1,9 @@
 <template>
-    <d2-container>
-        <d2-container :filename="filename">
-            <page-header slot="header" @submit="handleSubmit" @onArticle="handleArticle" ref="header"/>
-            <page-main :table-data="table" :loading="loading"/>
-            <page-footer slot="footer" :current="page.pageCurrent" :size="page.pageSize" :total="page.pageTotal"
-                         @change="handlePaginationChange"/>
-        </d2-container>
+    <d2-container :filename="filename">
+        <page-header slot="header" @submit="handleSubmit" @onArticle="handleArticle" ref="header"/>
+        <page-main :table-data="table" :loading="loading"/>
+        <page-footer slot="footer" :current="page.pageCurrent" :size="page.pageSize" :total="page.pageTotal"
+                     @change="handlePaginationChange"/>
     </d2-container>
 </template>
 
