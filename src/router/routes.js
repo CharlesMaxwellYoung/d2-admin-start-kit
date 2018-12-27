@@ -1,9 +1,10 @@
-import demo from './modules/demo'
 import blog from './modules/blog'
 
 import layoutHeaderAside from '@/layout/header-aside'
 
-const meta = {auth: true}
+const meta = {
+    auth: true
+}
 
 /**
  * 在主框架内显示
@@ -47,7 +48,6 @@ const frameIn = [
             }
         ]
     },
-    demo,
     blog
 ]
 

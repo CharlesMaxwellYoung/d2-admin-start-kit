@@ -46,6 +46,9 @@
                 })
             },
             handleArticle() {
+                this.$router.push({
+                    name: 'article-write-article'
+                })
             }
         }
     }

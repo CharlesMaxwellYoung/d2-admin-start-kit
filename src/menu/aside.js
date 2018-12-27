@@ -1,23 +1,9 @@
 // 菜单 侧边栏
 export default [
-    {path: '/index', title: '首页', icon: 'home'},
     {
-        title: '演示页面',
-        icon: 'folder-o',
-        children: [
-            {
-                path: '/demo/page1',
-                title: '页面 1'
-            },
-            {
-                path: '/demo/page2',
-                title: '页面 2'
-            },
-            {
-                path: '/demo/page3',
-                title: '页面 3'
-            }
-        ]
+        path: '/index',
+        title: '首页',
+        icon: 'home'
     },
     {
         title: '博客管理',
@@ -25,23 +11,23 @@ export default [
         children: [
             {
                 path: '/blog/articles',
-                title: '全部文章'
-            },
-            {
-                path: '/blog/write-article',
-                title: '编写博客'
+                title: '全部文章',
+                icon: 'file-archive-o'
             },
             {
                 path: '/demo/page2',
-                title: '草稿文章'
+                title: '草稿文章',
+                icon: 'file-text-o',
             },
             {
                 path: '/demo/page3',
-                title: '已经发表'
+                title: '已经发表',
+                icon: "file-word-o"
             },
             {
                 path: '/demo/page3',
-                title: '评论处理'
+                title: '评论处理',
+                icon: 'comment'
             }
         ]
     }

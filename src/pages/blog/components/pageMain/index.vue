@@ -1,76 +1,31 @@
 <template>
     <div>
-        <el-form
-                :inline="true"
-                size="mini">
-            <el-form-item :label="`已选数据下载 [ ${currentTableData.length} ]`">
-                <el-button-group>
-                    <el-button
-                            type="primary"
-                            size="mini"
-                            :disabled="currentTableData.length === 0"
-                            @click="handleDownloadXlsx(currentTableData)">
-                        xlsx
-                    </el-button>
-                    <el-button
-                            type="primary"
-                            size="mini"
-                            :disabled="currentTableData.length === 0"
-                            @click="handleDownloadCsv(currentTableData)">
-                        csv
-                    </el-button>
-                </el-button-group>
-            </el-form-item>
-            <el-form-item :label="`已选数据下载 [ ${multipleSelection.length} ]`">
-                <el-button-group>
-                    <el-button
-                            type="primary"
-                            size="mini"
-                            :disabled="multipleSelection.length === 0"
-                            @click="handleDownloadXlsx(multipleSelection)">
-                        xlsx
-                    </el-button>
-                    <el-button
-                            type="primary"
-                            size="mini"
-                            :disabled="multipleSelection.length === 0"
-                            @click="handleDownloadCsv(multipleSelection)">
-                        csv
-                    </el-button>
-                </el-button-group>
-            </el-form-item>
-        </el-form>
-
         <el-table
                 :data="currentTableData"
                 v-loading="loading"
                 size="mini"
                 stripe
                 style="width: 100%;"
-                @selection-change="handleSelectionChange">
 
+                @selection-change="handleSelectionChange">
             <el-table-column
                     type="selection"
                     width="55">
             </el-table-column>
 
-            <el-table-column label="卡密" :show-overflow-tooltip="true">
+            <el-table-column align="center" label="文章标题" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
-                    {{scope.row.key}}
+                    {{scope.row.title}}
                 </template>
             </el-table-column>
 
-            <el-table-column label="文章标题" width="180" align="center">
+            <el-table-column align="center" label="类别" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
-                    <el-tag
-                            size="mini"
-                            type="success">
-                        {{scope.row.value}}
-                    </el-tag>
+                    {{scope.row.title}}
                 </template>
             </el-table-column>
 
-            <el-table-column label="状态" width="50" align="center">
+            <el-table-column label="文章状态" width="180" align="center">
                 <template slot-scope="scope">
                     <boolean-control
                             :value="scope.row.type"
@@ -87,25 +42,20 @@
                     </boolean-control>
                 </template>
             </el-table-column>
-
-            <el-table-column label="管理员" width="60">
+            <el-table-column align="center" label="发布时间" width="150" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
-                    {{scope.row.admin}}
+                    {{scope.row.timeCreated}}
                 </template>
             </el-table-column>
 
-            <el-table-column label="创建时间" width="150" :show-overflow-tooltip="true">
+            <el-table-column lalign="center" abel="修改时间" width="150" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
-                    {{scope.row.dateTimeCreat}}
+                    {{scope.row.updatedTime}}
                 </template>
             </el-table-column>
-
-            <el-table-column label="使用时间" width="150" :show-overflow-tooltip="true">
-                <template slot-scope="scope">
-                    {{scope.row.dateTimeUse}}
-                </template>
+            <el-table-column label="操作" align="center">
+                <el-button type="text" size="small">编辑</el-button>
             </el-table-column>
-
         </el-table>
     </div>
 </template>
@@ -124,17 +74,7 @@
         data() {
             return {
                 currentTableData: [],
-                multipleSelection: [],
-                downloadColumns: [
-                    {label: '卡密', prop: 'key'},
-                    {label: '面值', prop: 'value'},
-                    {label: '状态', prop: 'type'},
-                    {label: '管理员', prop: 'admin'},
-                    {label: '管理员备注', prop: 'adminNote'},
-                    {label: '创建时间', prop: 'dateTimeCreat'},
-                    {label: '使用状态', prop: 'used'},
-                    {label: '使用时间', prop: 'dateTimeUse'}
-                ]
+                multipleSelection: []
             }
         },
         watch: {
@@ -152,37 +92,9 @@
                     ...oldValue,
                     type: val
                 })
-                // 注意 这里并没有把修改后的数据传递出去 如果需要的话请自行修改
             },
             handleSelectionChange(val) {
                 this.multipleSelection = val
-            },
-            downloadDataTranslate(data) {
-                return data.map(row => ({
-                    ...row,
-                    type: row.type ? '禁用' : '正常',
-                    used: row.used ? '已使用' : '未使用'
-                }))
-            },
-            handleDownloadXlsx(data) {
-                this.$export.excel({
-                    title: 'D2Admin 表格示例',
-                    columns: this.downloadColumns,
-                    data: this.downloadDataTranslate(data)
-                })
-                    .then(() => {
-                        this.$message('导出表格成功')
-                    })
-            },
-            handleDownloadCsv(data) {
-                this.$export.csv({
-                    title: 'D2Admin 表格示例',
-                    columns: this.downloadColumns,
-                    data: this.downloadDataTranslate(data)
-                })
-                    .then(() => {
-                        this.$message('导出CSV成功')
-                    })
             }
         }
     }
