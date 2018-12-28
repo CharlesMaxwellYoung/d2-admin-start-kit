@@ -33,6 +33,9 @@
 </template>
 
 <script>
+
+    import {mapActions, mapState} from 'vuex';
+
     /**
      * todo: 需要添加背景图片
      */
@@ -43,31 +46,47 @@
                 articleTitle: '',
                 articleContent: '',
                 placeholder: '博客正文',
+                blogId: '',
                 defaultOptions: [{
-                    value: 'backend',
+                    value: '后端',
                     label: '后端'
                 }, {
-                    value: 'frontend',
+                    value: '前端',
                     label: '前端'
                 }, {
                     value: '笔记',
-                    label: 'note'
+                    label: '笔记'
                 }, {
                     value: '文档',
-                    label: 'doc'
+                    label: '文档'
                 }],
                 articleType: []
             }
         },
+        computed: {
+            ...mapState('blog', {
+                currentBlog: 'currentBlog'
+            })
+        },
         created() {
-
+            if (this.currentBlog) {
+                let {title, content, type, _id} = this.currentBlog;
+                this.articleTitle = title;
+                this.articleContent = content;
+                this.articleType = type;
+                this.blogId = _id;
+            }
         },
         methods: {
+            ...mapActions('blog', {
+                'saveBlog': 'saveBlog',
+                'updateBlog': 'updateBlog'
+            }),
             publishArticle() {
-                this.createArticle(true);
+                this.createArticle(false);
             },
             saveArticle() {
-                this.createArticle(false);
+                this.createArticle(true);
             },
             createArticle(isDraft) {
                 let publishTime = this.$dayjs().format('YYYY-MM-DD HH:mm:ss');
@@ -78,14 +97,16 @@
                     date: publishTime,
                     isDraft
                 };
-                console.log(blogMain);
+                if (blogMain.isDraft && this.blogId) {
+                    blogMain._id = this.blogId;
+                    this.updateBlog(blogMain);
+                } else {
+                    this.saveBlog(blogMain);
+                }
             }
         }
     }
 </script>
 
 <style scoped>
-    .el-select {
-        margin-right: 20px;
-    }
 </style>

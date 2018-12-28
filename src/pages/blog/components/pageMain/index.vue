@@ -21,40 +21,35 @@
 
             <el-table-column align="center" label="类别" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
-                    {{scope.row.title}}
+                    <el-tag size="medium" type="success" v-for="(item,index) in scope.row.type" :key="index">{{item}}
+                    </el-tag>
                 </template>
             </el-table-column>
 
-            <el-table-column label="文章状态" width="180" align="center">
+            <el-table-column label="文章状态" align="center">
                 <template slot-scope="scope">
-                    <boolean-control
-                            :value="scope.row.type"
-                            @change="(val) => {
-              handleSwitchChange(val, scope.$index)}">
-                        <d2-icon
-                                name="check-circle"
-                                style="font-size: 20px; line-height: 32px; color: #67C23A;"
-                                slot="active"/>
-                        <d2-icon
-                                name="times-circle"
-                                style="font-size: 20px; line-height: 32px; color: #F56C6C;"
-                                slot="inactive"/>
-                    </boolean-control>
+                    <el-tag size="medium" v-if="scope.row.isDraft">未发布</el-tag>
+                    <el-tag size="medium" v-else>已发布</el-tag>
                 </template>
             </el-table-column>
             <el-table-column align="center" label="发布时间" width="150" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
-                    {{scope.row.timeCreated}}
+                    <i class="el-icon-time"></i>
+                    {{scope.row.date}}
                 </template>
             </el-table-column>
 
-            <el-table-column lalign="center" abel="修改时间" width="150" :show-overflow-tooltip="true">
+            <el-table-column align="center" label="修改时间" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
+                    <i class="el-icon-time"></i>
                     {{scope.row.updatedTime}}
                 </template>
             </el-table-column>
             <el-table-column label="操作" align="center">
-                <el-button type="text" size="small">编辑</el-button>
+                <template slot-scope="scope">
+                    <el-button type="primary" size="small" @click="handleEdit(scope)">编辑</el-button>
+                    <el-button type="danger" size="small" @click="handleDelete(scope)">删除</el-button>
+                </template>
             </el-table-column>
         </el-table>
     </div>
@@ -86,15 +81,14 @@
             }
         },
         methods: {
-            handleSwitchChange(val, index) {
-                const oldValue = this.currentTableData[index]
-                this.$set(this.currentTableData, index, {
-                    ...oldValue,
-                    type: val
-                })
-            },
             handleSelectionChange(val) {
                 this.multipleSelection = val
+            },
+            handleEdit({row}) {
+                this.$emit('onEdit', row);
+            },
+            handleDelete({row}) {
+                this.$emit('onDelete', row);
             }
         }
     }
