@@ -32,3 +32,4 @@ export function deleteBlog(title) {
         method: 'delete'
     })
 }
+
