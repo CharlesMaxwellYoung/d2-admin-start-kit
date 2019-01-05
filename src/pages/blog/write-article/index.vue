@@ -1,34 +1,39 @@
 <template>
     <d2-container>
         <template slot="header">
-            <el-form :inline="true" size="medium">
-                <el-form-item>
-                    <el-input placeholder="请输入博客标题" v-model="articleTitle"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-select
-                            v-model="articleTags"
-                            multiple
-                            filterable
-                            allow-create
-                            default-first-option
-                            placeholder="请选择或者输入文章标签">
-                        <el-option
-                                v-for="item in defaultOptions"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item>
-                    <el-input placeholder="请输入博客简介" type="textarea" v-model="articleAbstract"></el-input>
-                </el-form-item>
-            </el-form>
+            <div class="header">
+                新增文章
+            </div>
         </template>
-        <mavon-editor v-model="articleContent" :placeholder="placeholder" :boxShadow="false" codeStyle="darcula"
-                      @save="saveArticle"
-                      @change="editHandle"/>
+        <el-form size="medium" label-width="80px">
+            <el-form-item label="文章标题">
+                <el-input placeholder="请输入博客标题" v-model="articleTitle"></el-input>
+            </el-form-item>
+            <el-form-item label="文章标签">
+                <el-select
+                        v-model="articleTags"
+                        multiple
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请选择或者输入文章标签">
+                    <el-option
+                            v-for="item in defaultOptions"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="文章描述">
+                <el-input placeholder="请输入博客简介" type="textarea" v-model="articleAbstract"></el-input>
+            </el-form-item>
+            <el-form-item label="文章正文">
+                <mavon-editor v-model="articleContent" :placeholder="placeholder" :boxShadow="false" codeStyle="darcula"
+                              @save="saveArticle"
+                              @change="editHandle"/>
+            </el-form-item>
+        </el-form>
         <template slot="footer">
             <el-form :inline="true" size="medium">
                 <el-form-item v-if="!isPublishArticle">
@@ -172,4 +177,7 @@
 </script>
 
 <style scoped>
+    .header {
+        text-align: center;
+    }
 </style>

@@ -6,26 +6,36 @@ export default {
     state: {
         blogs: [],
         currentBlog: {},
-        editBlog: {}
-    },
-    getters: {
-        getBlogById(state) {
-            return (id) => state.blogs.find(item._id === id);
-        }
+        editBlog: {},
+        pagination: {}
     },
     mutations: {
         setBlog(state, blogs) {
             state.blogs = blogs
         },
+
         setCurrentBlog(state, currentBlog) {
             state.currentBlog = currentBlog
+        },
+
+        setPagination(state, setPagination) {
+            state.pagination = setPagination;
         }
 
     },
     actions: {
-        async getBlog({commit}) {
-            const {data} = await getBlog();
-            commit('setBlog', data);
+        async getBlog({commit}, {pageNumber = 1, pageSize = 20}) {
+            const {data: {blogs, page, size, total, totalPages}} = await getBlog({
+                pageNumber,
+                pageSize
+            });
+            commit('setPagination', {
+                page,
+                size,
+                total,
+                totalPages
+            });
+            commit('setBlog', blogs);
         },
 
         async saveBlog({commit}, blog) {
@@ -40,8 +50,13 @@ export default {
 
             })
         },
-        async deleteBlog({}, title) {
-            const data = await deleteBlog(title);
+        async deleteBlog({dispatch, state}, blogId) {
+            const data = await deleteBlog(blogId);
+            dispatch('getBlog', {
+                pageNumber: state.page,
+                pageSize: state.size,
+            });
+            return data;
         },
         /**
          * 博客更新操作

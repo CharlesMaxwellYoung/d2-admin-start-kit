@@ -3,9 +3,9 @@ import axios from '@/plugin/axios'
 
 const url = '/blog';
 
-export function getBlog() {
+export function getBlog({pageNumber, pageSize}) {
     return axios.request({
-        url,
+        url: `${url}?page=${pageNumber}&size=${pageSize}`,
         method: 'get'
     })
 }
@@ -26,9 +26,9 @@ export function updateBlog(data = {}) {
     })
 }
 
-export function deleteBlog(title) {
+export function deleteBlog(blogId) {
     return axios.request({
-        url: `${url}?title=${title}`,
+        url: `${url}?id=${blogId}`,
         method: 'delete'
     })
 }

@@ -35,14 +35,14 @@
             <el-table-column align="center" label="创建时间" width="150" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
                     <i class="el-icon-time"></i>
-                    {{scope.row.gmtCreated}}
+                    {{scope.row.createTime | dFormat}}
                 </template>
             </el-table-column>
 
             <el-table-column align="center" label="修改时间" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
                     <i class="el-icon-time"></i>
-                    {{scope.row.gmtModified}}
+                    {{scope.row.updateTime | dFormat}}
                 </template>
             </el-table-column>
             <el-table-column label="操作" align="center">

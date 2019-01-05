@@ -2,7 +2,7 @@
     <d2-container :filename="filename">
         <page-header slot="header" @onArticle="handleArticle" ref="header"/>
         <page-main :table-data="blogs" :loading="loading" @onDelete="deleteBlog" @onEdit="editBlog"/>
-        <page-footer slot="footer" :current="page.pageCurrent" :size="page.pageSize" :total="page.pageTotal"
+        <page-footer slot="footer" :current="current" :size="size" :total="pagination.total"
                      @change="handlePaginationChange"/>
     </d2-container>
 </template>
@@ -16,11 +16,8 @@
             return {
                 filename: __filename,
                 loading: false,
-                page: {
-                    pageCurrent: 1,
-                    pageSize: 10,
-                    pageTotal: 0
-                }
+                size: 10,
+                current: 1
             }
         },
         components: {
@@ -30,25 +27,26 @@
         },
         computed: {
             ...mapState('blog', {
-                blogs: s => s.blogs
+                blogs: s => s.blogs,
+                pagination: s => s.pagination
             })
         },
         created() {
-            this.getBlog();
+            this.getBlog({pageSize: this.size});
         },
         methods: {
             ...mapActions('blog', {
-                getBlog: 'getBlog'
+                getBlog: 'getBlog',
+                deleteBlogModule: 'deleteBlog'
             }),
             ...mapMutations('blog', {
                 setCurrentBlog: 'setCurrentBlog'
             }),
             handlePaginationChange(val) {
-                this.$notify({
-                    title: '分页变化',
-                    message: `当前第${val.current}页 共${val.total}条 每页${val.size}条`
-                });
-                this.page = val;
+                let {size, current} = val;
+                this.size = size;
+                this.current = current;
+                this.getBlog({pageNumber: current, pageSize: this.size});
             },
             handleArticle() {
                 this.$router.push({
@@ -62,7 +60,23 @@
                 });
                 this.setCurrentBlog(row);
             },
-            deleteBlog() {
+            deleteBlog(edit) {
+                this.$confirm('此操作将永久删除该博客, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(async () => {
+                    let data = await this.deleteBlogModule(edit._id);
+                    this.$message({
+                        type: 'success',
+                        message: data
+                    });
+                }).catch(async () => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
 
             }
         }
