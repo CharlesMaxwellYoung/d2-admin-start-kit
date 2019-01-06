@@ -15,16 +15,6 @@ export default [
                 icon: 'file-archive-o'
             },
             {
-                path: '/demo/page2',
-                title: '草稿文章',
-                icon: 'file-text-o',
-            },
-            {
-                path: '/demo/page3',
-                title: '已经发表',
-                icon: "file-word-o"
-            },
-            {
                 path: '/demo/page3',
                 title: '评论处理',
                 icon: 'comment'
