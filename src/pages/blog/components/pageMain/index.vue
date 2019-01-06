@@ -6,7 +6,6 @@
                 size="mini"
                 stripe
                 style="width: 100%;"
-
                 @selection-change="handleSelectionChange">
             <el-table-column
                     type="selection"
@@ -68,8 +67,7 @@
         },
         data() {
             return {
-                currentTableData: [],
-                multipleSelection: []
+                currentTableData: []
             }
         },
         watch: {
@@ -82,7 +80,7 @@
         },
         methods: {
             handleSelectionChange(val) {
-                this.multipleSelection = val
+                this.$emit('onPatchSelect', val)
             },
             handleEdit({row}) {
                 this.$emit('onEdit', row);

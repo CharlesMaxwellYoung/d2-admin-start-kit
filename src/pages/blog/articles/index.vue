@@ -1,7 +1,9 @@
 <template>
     <d2-container :filename="filename">
-        <page-header slot="header" @onArticle="handleArticle" ref="header"/>
-        <page-main :table-data="blogs" :loading="loading" @onDelete="deleteBlog" @onEdit="editBlog"/>
+        <page-header slot="header" @onArticle="handleArticle" ref="header" @onPatchDelete="patchDelBlog"
+                     :isMulti="isMulti"/>
+        <page-main :table-data="blogs" :loading="loading" @onDelete="deleteBlog" @onEdit="editBlog"
+                   @onPatchSelect="mulSelect"/>
         <page-footer slot="footer" :current="current" :size="size" :total="pagination.total"
                      @change="handlePaginationChange"/>
     </d2-container>
@@ -17,7 +19,9 @@
                 filename: __filename,
                 loading: false,
                 size: 10,
-                current: 1
+                current: 1,
+                isMulti: true,
+                readyDelBlogs: []
             }
         },
         components: {
@@ -66,7 +70,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(async () => {
-                    let data = await this.deleteBlogModule(edit._id);
+                    let data = await this.deleteBlogModule(edit.title);
                     this.$message({
                         type: 'success',
                         message: data
@@ -78,6 +82,17 @@
                     });
                 });
 
+            },
+            patchDelBlog() {
+                console.log(this.readyDelBlogs);
+                if (this.readyDelBlogs.length > 0) {
+                    let blogIds = this.readyDelBlogs.map(item => item.title);
+                    console.log(blogIds)
+                }
+            },
+            mulSelect(val) {
+                this.readyDelBlogs = val;
+                this.isMulti = !(val && val.length > 0);
             }
         }
     }

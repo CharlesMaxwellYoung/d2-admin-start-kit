@@ -1,4 +1,4 @@
-import {getBlog, saveBlog, updateBlog, deleteBlog, findByIdAndUpdate} from '@/api/sys.blog'
+import {getBlog, saveBlog, updateBlog, deleteBlog, findByIdAndUpdate, uploadImage} from '@/api/sys.blog'
 import isEmpty from 'lodash/isEmpty'
 
 export default {
@@ -40,21 +40,15 @@ export default {
 
         async saveBlog({commit}, blog) {
             delete blog._id;
-            const {success} = await saveBlog(blog);
-            return Promise((resolve) => {
-                if (success) {
-                    resolve('保存成功');
-                } else {
-                    resolve('保存失败')
-                }
+            const {success, data} = await saveBlog(blog);
+            return success ? '保存成功' : '保存失败';
 
-            })
         },
-        async deleteBlog({dispatch, state}, blogId) {
-            const data = await deleteBlog(blogId);
+        async deleteBlog({dispatch, state}, title) {
+            const {data} = await deleteBlog(title);
             dispatch('getBlog', {
-                pageNumber: state.page,
-                pageSize: state.size,
+                pageNumber: +state.pagination.page,
+                pageSize: +state.pagination.size,
             });
             return data;
         },

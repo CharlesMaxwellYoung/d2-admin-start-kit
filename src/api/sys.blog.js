@@ -26,9 +26,9 @@ export function updateBlog(data = {}) {
     })
 }
 
-export function deleteBlog(blogId) {
+export function deleteBlog(title) {
     return axios.request({
-        url: `${url}?id=${blogId}`,
+        url: `${url}?title=${title}`,
         method: 'delete'
     })
 }

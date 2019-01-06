@@ -31,7 +31,9 @@
             <el-form-item label="文章正文">
                 <mavon-editor v-model="articleContent" :placeholder="placeholder" :boxShadow="false" codeStyle="darcula"
                               @save="saveArticle"
-                              @change="editHandle"/>
+                              @change="editHandle"
+                              @imgAdd="imgAdd"
+                              @imgDel="imgDel"/>
             </el-form-item>
         </el-form>
         <template slot="footer">
@@ -112,7 +114,8 @@
             ...mapActions('blog', {
                 'saveBlog': 'saveBlog',
                 'updateBlog': 'updateBlog',
-                'updateOrSave': 'updateOrSave'
+                'updateOrSave': 'updateOrSave',
+                'uploadImage': 'uploadImage'
             }),
 
             ...mapMutations('blog', {
@@ -171,6 +174,10 @@
             },
             editHandle() {
                 // this.createArticleThrottle(false)
+            },
+            imgAdd(pos, $file) {
+            },
+            imgDel() {
             }
         }
     }

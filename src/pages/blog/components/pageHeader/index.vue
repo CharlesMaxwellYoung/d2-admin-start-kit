@@ -16,9 +16,18 @@
 
 <script>
     export default {
+        props: {
+            isMulti: {
+                type: Boolean,
+                default: true
+            }
+        },
         methods: {
             handleFormArticle() {
                 this.$emit('onArticle')
+            },
+            handleFormArticleDel() {
+                this.$emit('onPatchDelete')
             }
         }
     }
