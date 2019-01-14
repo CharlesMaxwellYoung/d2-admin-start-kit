@@ -25,6 +25,15 @@
                     </el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item label="封面">
+                <el-upload
+                        :action="actionUrl"
+                        list-type="picture-card"
+                        :on-preview="handlePictureCardPreview"
+                        :on-remove="handleRemove">
+                    <i class="el-icon-plus"></i>
+                </el-upload>
+            </el-form-item>
             <el-form-item label="文章描述">
                 <el-input placeholder="请输入博客简介" type="textarea" v-model="articleAbstract"></el-input>
             </el-form-item>
@@ -85,12 +94,15 @@
                 }],
                 articleTags: [],
                 publishText: '未发布',
-                createArticleThrottle: null
+                createArticleThrottle: null,
+                dialogImageUrl: '',
+                dialogVisible: false
             }
         },
         computed: {
             ...mapState('blog', {
-                currentBlog: 'currentBlog'
+                currentBlog: s => s.currentBlog,
+                actionUrl: s => s.actionUrl
             }),
 
             isPublishArticle() {
@@ -122,6 +134,13 @@
                 setCurrentBlog: 'setCurrentBlog'
             }),
 
+            handleRemove(file, fileList) {
+                console.log(file, fileList);
+            },
+            handlePictureCardPreview(file) {
+                this.dialogImageUrl = file.url;
+                this.dialogVisible = true;
+            },
             publishArticle() {
                 this.createArticle(false);
                 this.$router.push({name: 'article-articles'})
