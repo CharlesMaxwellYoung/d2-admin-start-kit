@@ -30,6 +30,7 @@
                         :action="getUploadUrl"
                         list-type="picture-card"
                         :on-success="handleSuccess"
+                        :file-list="uploadImages"
                         :on-remove="handleRemove">
                     <i class="el-icon-plus"></i>
                 </el-upload>
@@ -99,7 +100,8 @@
                 dialogImageUrl: '',
                 dialogVisible: false,
                 identification: '',
-                thumbnail: ''
+                thumbnail: '',
+                uploadImages: []
             }
         },
         computed: {
@@ -128,6 +130,13 @@
                 this.articleTitle = `${this.$dayjs().format('YYYY-MM-DD HH:mm:ss')}_草稿`;
             }
             this.createArticleThrottle = debounce(this.createArticle, TIMES)
+
+            this.uploadImages = [
+                {
+                    url: this.currentBlog.thumbnail,
+                    name: '321312'
+                }
+            ]
         },
         methods: {
             ...mapActions('blog', {
