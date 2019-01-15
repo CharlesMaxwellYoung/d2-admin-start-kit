@@ -27,9 +27,9 @@
             </el-form-item>
             <el-form-item label="封面">
                 <el-upload
-                        :action="actionUrl"
+                        :action="getUploadUrl"
                         list-type="picture-card"
-                        :on-preview="handlePictureCardPreview"
+                        :on-success="handleSuccess"
                         :on-remove="handleRemove">
                     <i class="el-icon-plus"></i>
                 </el-upload>
@@ -68,6 +68,7 @@
     import {mapActions, mapState, mapMutations} from 'vuex';
     import isEmpty from 'lodash/isEmpty'
     import debounce from 'lodash/debounce'
+    import md from 'md5'
 
     const TIMES = 1000;
     export default {
@@ -96,7 +97,9 @@
                 publishText: '未发布',
                 createArticleThrottle: null,
                 dialogImageUrl: '',
-                dialogVisible: false
+                dialogVisible: false,
+                identification: '',
+                thumbnail: ''
             }
         },
         computed: {
@@ -107,6 +110,10 @@
 
             isPublishArticle() {
                 return this.currentBlog._id && !this.currentBlog.isHidden
+            },
+            getUploadUrl() {
+                this.identification = md(this.articleTitle);
+                return `${this.actionUrl}?ident=${this.identification}`;
             }
         },
         created() {
@@ -137,9 +144,8 @@
             handleRemove(file, fileList) {
                 console.log(file, fileList);
             },
-            handlePictureCardPreview(file) {
-                this.dialogImageUrl = file.url;
-                this.dialogVisible = true;
+            handleSuccess({data}) {
+                this.thumbnail = data;
             },
             publishArticle() {
                 this.createArticle(false);
@@ -176,7 +182,9 @@
                     tags: this.articleTags,
                     isHidden,
                     _id: this.blogId,
-                    abstract: this.articleAbstract
+                    abstract: this.articleAbstract,
+                    identification: this.identification,
+                    thumbnail: this.thumbnail
                 }).then(({data}) => {
                     if (data) {
                         this.$message({
