@@ -8,7 +8,8 @@ export default {
         currentBlog: {},
         editBlog: {},
         pagination: {},
-        actionUrl: process.env.VUE_APP_API + 'imgUpload'
+        actionUrl: process.env.VUE_APP_API + 'imgUpload',
+        imageUrl: process.env.VUE_IMAGE_URL
     },
     mutations: {
         setBlog(state, blogs) {
@@ -41,8 +42,7 @@ export default {
 
         async saveBlog({commit}, blog) {
             delete blog._id;
-            const {success, data} = await saveBlog(blog);
-            return success ? '保存成功' : '保存失败';
+            return await saveBlog(blog);
 
         },
         async deleteBlog({dispatch, state}, title) {

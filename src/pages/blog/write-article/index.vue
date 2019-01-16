@@ -31,7 +31,11 @@
                         list-type="picture-card"
                         :on-success="handleSuccess"
                         :file-list="uploadImages"
-                        :on-remove="handleRemove">
+                        :on-remove="handleRemove"
+                        :limit="1"
+                        :on-exceed="showLimitTips"
+                        :disabled="saveBlogId === '' && blogId === ''"
+                >
                     <i class="el-icon-plus"></i>
                 </el-upload>
             </el-form-item>
@@ -39,7 +43,10 @@
                 <el-input placeholder="请输入博客简介" type="textarea" v-model="articleAbstract"></el-input>
             </el-form-item>
             <el-form-item label="文章正文">
-                <mavon-editor v-model="articleContent" :placeholder="placeholder" :boxShadow="false" codeStyle="darcula"
+                <mavon-editor v-model="articleContent"
+                              :placeholder="placeholder"
+                              :boxShadow="false"
+                              codeStyle="darcula"
                               @save="saveArticle"
                               @change="editHandle"
                               @imgAdd="imgAdd"
@@ -69,7 +76,6 @@
     import {mapActions, mapState, mapMutations} from 'vuex';
     import isEmpty from 'lodash/isEmpty'
     import debounce from 'lodash/debounce'
-    import md from 'md5'
 
     const TIMES = 1000;
     export default {
@@ -99,44 +105,48 @@
                 createArticleThrottle: null,
                 dialogImageUrl: '',
                 dialogVisible: false,
-                identification: '',
                 thumbnail: '',
-                uploadImages: []
+                uploadDisable: true,
+                uploadImages: [],
+                saveBlogId: ''
             }
         },
         computed: {
             ...mapState('blog', {
                 currentBlog: s => s.currentBlog,
-                actionUrl: s => s.actionUrl
+                actionUrl: s => s.actionUrl,
+                imageUrl: s => s.imageUrl
             }),
 
             isPublishArticle() {
                 return this.currentBlog._id && !this.currentBlog.isHidden
             },
             getUploadUrl() {
-                this.identification = md(this.articleTitle);
-                return `${this.actionUrl}?ident=${this.identification}`;
+                let id = this.saveBlogId || this.blogId;
+                return `${this.actionUrl}?ident=${id}`;
             }
         },
         created() {
+            this.uploadImages = []
             if (!isEmpty(this.currentBlog._id)) {
-                let {title, content, tags, _id, abstract} = this.currentBlog;
+                let {title, content, tags, _id, abstract, thumbnail} = this.currentBlog;
                 this.articleTitle = title;
                 this.articleContent = content;
                 this.articleTags = tags;
                 this.blogId = _id;
                 this.articleAbstract = abstract;
+                if (thumbnail) {
+                    this.uploadImages.push({
+                        name: '封面图',
+                        url: 'http://127.0.0.1:7001/public/upload/' + thumbnail
+                    })
+                }
             } else {
                 this.articleTitle = `${this.$dayjs().format('YYYY-MM-DD HH:mm:ss')}_草稿`;
             }
-            this.createArticleThrottle = debounce(this.createArticle, TIMES)
+            this.createArticleThrottle = debounce(this.createArticle, TIMES);
 
-            this.uploadImages = [
-                {
-                    url: this.currentBlog.thumbnail,
-                    name: '321312'
-                }
-            ]
+
         },
         methods: {
             ...mapActions('blog', {
@@ -153,7 +163,7 @@
             handleRemove(file, fileList) {
                 console.log(file, fileList);
             },
-            handleSuccess({data}) {
+            handleSuccess({data = ''}) {
                 this.thumbnail = data;
             },
             publishArticle() {
@@ -190,14 +200,14 @@
                     content: this.articleContent,
                     tags: this.articleTags,
                     isHidden,
-                    _id: this.blogId,
+                    _id: this.saveBlogId || this.blogId,
                     abstract: this.articleAbstract,
-                    identification: this.identification,
                     thumbnail: this.thumbnail
-                }).then(({data}) => {
-                    if (data) {
+                }).then(({data, success}) => {
+                    this.saveBlogId = data._id || null;
+                    if (success) {
                         this.$message({
-                            message: data,
+                            message: '成功',
                             type: 'success'
                         });
                     } else {
@@ -210,6 +220,9 @@
             },
             editHandle() {
                 // this.createArticleThrottle(false)
+            },
+            showLimitTips() {
+
             },
             imgAdd(pos, $file) {
             },
