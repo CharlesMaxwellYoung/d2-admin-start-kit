@@ -72,12 +72,11 @@
 </template>
 
 <script>
-
     import {mapActions, mapState, mapMutations} from 'vuex';
     import isEmpty from 'lodash/isEmpty'
     import debounce from 'lodash/debounce'
 
-    const TIMES = 1000;
+    const TIMER = 1000;
     export default {
         name: "writeArticle",
         data() {
@@ -126,8 +125,9 @@
                 return `${this.actionUrl}?ident=${id}`;
             }
         },
+
         created() {
-            this.uploadImages = []
+            this.uploadImages = [];
             if (!isEmpty(this.currentBlog._id)) {
                 let {title, content, tags, _id, abstract, thumbnail} = this.currentBlog;
                 this.articleTitle = title;
@@ -135,6 +135,7 @@
                 this.articleTags = tags;
                 this.blogId = _id;
                 this.articleAbstract = abstract;
+                this.thumbnail = thumbnail;
                 if (thumbnail) {
                     this.uploadImages.push({
                         name: '封面图',
@@ -144,9 +145,7 @@
             } else {
                 this.articleTitle = `${this.$dayjs().format('YYYY-MM-DD HH:mm:ss')}_草稿`;
             }
-            this.createArticleThrottle = debounce(this.createArticle, TIMES);
-
-
+            this.createArticleThrottle = debounce(this.createArticle, TIMER);
         },
         methods: {
             ...mapActions('blog', {
@@ -222,7 +221,10 @@
                 // this.createArticleThrottle(false)
             },
             showLimitTips() {
-
+                this.$message({
+                    message: '只能上传一张封面',
+                    type: 'error'
+                });
             },
             imgAdd(pos, $file) {
             },
