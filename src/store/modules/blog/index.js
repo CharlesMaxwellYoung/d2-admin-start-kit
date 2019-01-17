@@ -45,8 +45,8 @@ export default {
             return await saveBlog(blog);
 
         },
-        async deleteBlog({dispatch, state}, title) {
-            const {data} = await deleteBlog(title);
+        async deleteBlog({dispatch, state}, id) {
+            const {data} = await deleteBlog(id);
             dispatch('getBlog', {
                 pageNumber: +state.pagination.page,
                 pageSize: +state.pagination.size,

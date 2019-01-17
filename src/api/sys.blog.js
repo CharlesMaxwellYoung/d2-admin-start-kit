@@ -1,7 +1,7 @@
 import axios from '@/plugin/axios'
 
 
-const url = '/blog';
+const url = '/v1/blogs';
 
 export function getBlog({pageNumber, pageSize}) {
     return axios.request({
@@ -19,16 +19,18 @@ export function saveBlog(data = {}) {
 }
 
 export function updateBlog(data = {}) {
+    const {_id} = data;
+    delete  data._id;
     return axios.request({
-        url,
+        url: `${url}/${_id}`,
         method: 'put',
         data
     })
 }
 
-export function deleteBlog(title) {
+export function deleteBlog(id) {
     return axios.request({
-        url: `${url}?title=${title}`,
+        url: `${url}/${id}`,
         method: 'delete'
     })
 }

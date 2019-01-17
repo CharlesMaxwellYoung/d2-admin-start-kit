@@ -27,6 +27,7 @@
             </el-form-item>
             <el-form-item label="封面">
                 <el-upload
+                        :headers="uploadHeader"
                         :action="getUploadUrl"
                         list-type="picture-card"
                         :on-success="handleSuccess"
@@ -75,7 +76,7 @@
     import {mapActions, mapState, mapMutations} from 'vuex';
     import isEmpty from 'lodash/isEmpty'
     import debounce from 'lodash/debounce'
-
+    import util from '@/libs/util'
     const TIMER = 1000;
     export default {
         name: "writeArticle",
@@ -107,7 +108,10 @@
                 thumbnail: '',
                 uploadDisable: true,
                 uploadImages: [],
-                saveBlogId: ''
+                saveBlogId: '',
+                uploadHeader:{
+                    'x-csrf-token':util.cookies.getServiceToken('csrfToken')
+                }
             }
         },
         computed: {

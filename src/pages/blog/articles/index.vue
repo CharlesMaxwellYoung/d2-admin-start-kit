@@ -64,13 +64,13 @@
                 });
                 this.setCurrentBlog(row);
             },
-            deleteBlog(edit) {
+            deleteBlog(delModel) {
                 this.$confirm('此操作将永久删除该博客, 是否继续?', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(async () => {
-                    let data = await this.deleteBlogModule(edit.title);
+                    let data = await this.deleteBlogModule(delModel._id);
                     this.$message({
                         type: 'success',
                         message: data
