@@ -1,7 +1,7 @@
 import axios from '@/plugin/axios'
 
 
-const url = '/v1/blogs';
+const url = '/blogs';
 
 export function getBlog({pageNumber, pageSize}) {
     return axios.request({

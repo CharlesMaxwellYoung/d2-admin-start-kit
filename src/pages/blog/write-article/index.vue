@@ -30,12 +30,13 @@
                         :headers="uploadHeader"
                         :action="getUploadUrl"
                         list-type="picture-card"
-                        :on-success="handleSuccess"
+                        :on-success="uploadSuccess"
                         :file-list="uploadImages"
-                        :on-remove="handleRemove"
+                        :on-remove="uploadRemove"
                         :limit="1"
                         :on-exceed="showLimitTips"
                         :disabled="saveBlogId === '' && blogId === ''"
+                        :data="uploadData"
                 >
                     <i class="el-icon-plus"></i>
                 </el-upload>
@@ -77,6 +78,7 @@
     import isEmpty from 'lodash/isEmpty'
     import debounce from 'lodash/debounce'
     import util from '@/libs/util'
+
     const TIMER = 1000;
     export default {
         name: "writeArticle",
@@ -105,12 +107,16 @@
                 createArticleThrottle: null,
                 dialogImageUrl: '',
                 dialogVisible: false,
-                thumbnail: '',
+                thumbnail: {},
                 uploadDisable: true,
                 uploadImages: [],
                 saveBlogId: '',
-                uploadHeader:{
-                    'x-csrf-token':util.cookies.getServiceToken('csrfToken')
+                uploadHeader: {
+                    'x-csrf-token': util.cookies.getServiceToken('csrfToken')
+                },
+                uploadData: {
+                    moduleName: 'blog',
+                    id: ''
                 }
             }
         },
@@ -124,9 +130,10 @@
             isPublishArticle() {
                 return this.currentBlog._id && !this.currentBlog.isHidden
             },
+
             getUploadUrl() {
-                let id = this.saveBlogId || this.blogId;
-                return `${this.actionUrl}?ident=${id}`;
+                this.uploadData.id = this.saveBlogId || this.blogId;
+                return `${this.actionUrl}`;
             }
         },
 
@@ -138,12 +145,14 @@
                 this.articleContent = content;
                 this.articleTags = tags;
                 this.blogId = _id;
+                this.uploadData.id = _id;
                 this.articleAbstract = abstract;
                 this.thumbnail = thumbnail;
+                console.log(util.getPosterUrl(thumbnail));
                 if (thumbnail) {
                     this.uploadImages.push({
-                        name: '封面图',
-                        url: 'http://127.0.0.1:7001/public/upload/' + thumbnail
+                        name: thumbnail,
+                        url: util.getPosterUrl(thumbnail)
                     })
                 }
             } else {
@@ -158,15 +167,15 @@
                 'updateOrSave': 'updateOrSave',
                 'uploadImage': 'uploadImage'
             }),
-
             ...mapMutations('blog', {
                 setCurrentBlog: 'setCurrentBlog'
             }),
 
-            handleRemove(file, fileList) {
+            uploadRemove(file, fileList) {
                 console.log(file, fileList);
             },
-            handleSuccess({data = ''}) {
+            uploadSuccess({data = ''}) {
+
                 this.thumbnail = data;
             },
             publishArticle() {
@@ -205,9 +214,11 @@
                     isHidden,
                     _id: this.saveBlogId || this.blogId,
                     abstract: this.articleAbstract,
-                    thumbnail: this.thumbnail
+                    thumbnail: this.thumbnail || {}
                 }).then(({data, success}) => {
-                    this.saveBlogId = data._id || null;
+                    if (data._id) {
+                        this.saveBlogId = data._id;
+                    }
                     if (success) {
                         this.$message({
                             message: '成功',

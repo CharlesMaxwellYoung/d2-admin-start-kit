@@ -8,8 +8,7 @@ export default {
         currentBlog: {},
         editBlog: {},
         pagination: {},
-        actionUrl: process.env.VUE_APP_API + 'imgUpload',
-        imageUrl: process.env.VUE_IMAGE_URL
+        actionUrl: process.env.VUE_APP_API + 'images'
     },
     mutations: {
         setBlog(state, blogs) {
