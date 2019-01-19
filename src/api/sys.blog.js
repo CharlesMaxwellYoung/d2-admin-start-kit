@@ -3,7 +3,7 @@ import axios from '@/plugin/axios'
 
 const url = '/blogs';
 
-export function getBlog({pageNumber, pageSize}) {
+export function getBlog({ pageNumber, pageSize }) {
     return axios.request({
         url: `${url}?page=${pageNumber}&size=${pageSize}`,
         method: 'get'
@@ -19,8 +19,8 @@ export function saveBlog(data = {}) {
 }
 
 export function updateBlog(data = {}) {
-    const {_id} = data;
-    delete  data._id;
+    const { _id } = data;
+    delete data._id;
     return axios.request({
         url: `${url}/${_id}`,
         method: 'put',
@@ -32,6 +32,14 @@ export function deleteBlog(id) {
     return axios.request({
         url: `${url}/${id}`,
         method: 'delete'
+    })
+}
+
+export function deleteImage(name, data) {
+    return axios.request({
+        url: `/images/${name}`,
+        method: 'delete',
+        data
     })
 }
 
