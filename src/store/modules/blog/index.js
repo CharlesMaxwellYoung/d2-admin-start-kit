@@ -1,4 +1,4 @@
-import { getBlog, saveBlog, updateBlog, deleteBlog, deleteImage } from '@/api/sys.blog'
+import {getBlog, saveBlog, updateBlog, deleteBlog, deleteImage} from '@/api/sys.blog'
 import isEmpty from 'lodash/isEmpty'
 
 export default {
@@ -25,8 +25,8 @@ export default {
 
     },
     actions: {
-        async getBlog({ commit }, { pageNumber = 1, pageSize = 20 }) {
-            const { data: { blogs, page, size, total, totalPages } } = await getBlog({
+        async getBlog({commit}, {pageNumber = 1, pageSize = 20}) {
+            const {data: {blogs, page, size, total, totalPages}} = await getBlog({
                 pageNumber,
                 pageSize
             });
@@ -39,13 +39,13 @@ export default {
             commit('setBlog', blogs);
         },
 
-        async saveBlog({ commit }, blog) {
+        async saveBlog({commit}, blog) {
             delete blog._id;
             return await saveBlog(blog);
 
         },
-        async deleteBlog({ dispatch, state }, id) {
-            const { data } = await deleteBlog(id);
+        async deleteBlog({dispatch, state}, id) {
+            const {data} = await deleteBlog(id);
             dispatch('getBlog', {
                 pageNumber: +state.pagination.page,
                 pageSize: +state.pagination.size,
@@ -57,7 +57,7 @@ export default {
          * @param blog
          * @returns {Promise<*>}
          */
-        async updateBlog({ }, blog) {
+        async updateBlog({}, blog) {
             return await updateBlog(blog);
         },
         /**
@@ -66,8 +66,8 @@ export default {
          * @param blog
          * @returns {Promise<void>}
          */
-        async updateOrSave({ dispatch }, blog) {
-            const { _id } = blog;
+        async updateOrSave({dispatch}, blog) {
+            const {_id} = blog;
             //新增
             if (isEmpty(_id)) {
                 return dispatch('saveBlog', blog)
@@ -75,9 +75,9 @@ export default {
                 return dispatch('updateBlog', blog)
             }
         },
-        async deleteImage(name, { id, moduleName }) {
+        async deleteImage({}, {pathName, moduleName, name}) {
             return await deleteImage(name, {
-                id,
+                pathName,
                 moduleName
             })
         }

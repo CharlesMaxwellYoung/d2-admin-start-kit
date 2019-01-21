@@ -36,6 +36,7 @@ export function deleteBlog(id) {
 }
 
 export function deleteImage(name, data) {
+    console.log(name);
     return axios.request({
         url: `/images/${name}`,
         method: 'delete',
