@@ -14,8 +14,7 @@
                         filterable
                         allow-create
                         default-first-option
-                        placeholder="请选择或者输入文章标签"
-                >
+                        placeholder="请选择或者输入文章标签">
                     <el-option
                             v-for="item in defaultOptions"
                             :key="item.value"

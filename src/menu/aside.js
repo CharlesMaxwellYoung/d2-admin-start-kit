@@ -6,6 +6,11 @@ export default [
         icon: 'home'
     },
     {
+        path: '/index',
+        title: '用户管理',
+        icon: 'home'
+    },
+    {
         title: '博客管理',
         icon: 'file-text',
         children: [
