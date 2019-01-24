@@ -13,13 +13,27 @@ export default {
             path: 'articles',
             name: `${pre}articles`,
             component: () => import('@/pages/blog/articles'),
-            meta: {meta, title: '所有文章'}
+            meta: {
+                meta,
+                title: '所有文章',
+                breadcrumb: [{
+                    name: '所有文章',
+                    pathName: '/blog/articles'
+                }]
+            }
         },
         {
             path: 'write-article',
             name: `${pre}write-article`,
             component: () => import('@/pages/blog/write-article'),
-            meta: {meta, title: '编写博客'}
+            meta: {
+                meta,
+                title: '编写博客',
+                breadcrumb: [{
+                    name: '编写博客',
+                    pathName: '/blog/write-article'
+                }]
+            }
         }
     ])('article-')
 }

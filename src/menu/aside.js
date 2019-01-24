@@ -8,7 +8,24 @@ export default [
     {
         path: '/index',
         title: '用户管理',
-        icon: 'home'
+        icon: 'users',
+        children: [
+            {
+                path: '/users',
+                title: '用户管理',
+                icon: 'user'
+            },
+            {
+                path: '/roles',
+                title: '角色管理',
+                icon: 'user-secret'
+            },
+            {
+                path: '/permissions',
+                title: '权限管理',
+                icon: 'lock'
+            }
+        ]
     },
     {
         title: '博客管理',
