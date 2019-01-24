@@ -12,14 +12,25 @@ const meta = {
 const frameIn = [
     {
         path: '/',
-        redirect: {name: 'index'},
+        redirect: {
+            name: 'index'
+        },
         component: layoutHeaderAside,
         children: [
             // 首页 必须 name:index
             {
                 path: 'index',
                 name: 'index',
-                meta,
+                meta:{
+                    meta,
+                    title: '主页',
+                    breadcrumb: [
+                        {
+                            name: '主页',
+                            pathName: '/'
+                        }
+                    ]
+                },
                 component: () => import('@/pages/index')
             },
             // 刷新页面 必须保留

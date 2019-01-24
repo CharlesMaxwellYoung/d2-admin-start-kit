@@ -16,10 +16,16 @@ export default {
             meta: {
                 meta,
                 title: '所有文章',
-                breadcrumb: [{
-                    name: '所有文章',
-                    pathName: '/blog/articles'
-                }]
+                breadcrumb: [
+                    {
+                        name: '博客管理',
+                        pathName: '/blog/articles'
+                    },
+                    {
+                        name: '全部文章',
+                        pathName: '/blog/articles'
+                    }
+                ]
             }
         },
         {
@@ -29,10 +35,16 @@ export default {
             meta: {
                 meta,
                 title: '编写博客',
-                breadcrumb: [{
-                    name: '编写博客',
-                    pathName: '/blog/write-article'
-                }]
+                breadcrumb: [
+                    {
+                        name: '博客管理',
+                        pathName: '/blog/write-article'
+                    },
+                    {
+                        name: '编写博客',
+                        pathName: '/blog/write-article'
+                    }
+                ]
             }
         }
     ])('article-')
